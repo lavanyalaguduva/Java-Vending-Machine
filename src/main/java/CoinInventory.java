@@ -46,7 +46,7 @@ public class CoinInventory {
     }
 
     public double dispenseCoins(double balanceToBePaid) {
-        System.out.println("TOTAL CHANGE TO DISPENSE " + Double.valueOf(df.format(balanceToBePaid)));
+        System.out.println("TOTAL CHANGE TO DISPENSE: " + Double.valueOf(df.format(balanceToBePaid)));
 
         if (balanceToBePaid > 0) {
             while (balanceToBePaid > 0) {
@@ -69,7 +69,7 @@ public class CoinInventory {
     private double deduct(double balance, Coin coin) {
         double valueToDeduct = Double.valueOf(coin.getDenomination()) / 100;
         balance = Double.valueOf(df.format(balance - valueToDeduct));
-        System.out.println("COIN DISPENSED " + coin.getDenomination());
+        System.out.println("COIN DISPENSED: " + coin.getDenomination()+"P");
 
         this.inventory.put(coin, this.inventory.get(coin) - 1);
         this.inventoryBalance = Double.valueOf(df.format(this.inventoryBalance - valueToDeduct));

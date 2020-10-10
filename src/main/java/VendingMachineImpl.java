@@ -26,25 +26,26 @@ public class VendingMachineImpl implements  VendingMachineAPI{
     }
 
     public void initialize() {
-        System.out.println("INITIALIZE THE VENDING MACHINE BALANCE NOW");
+        System.out.println("======INITIALIZE THE VENDING MACHINE BALANCE NOW======");
         coinInventory.addCoins();
         itemInventory.addItems();
     }
 
     public void enterItemToBuy() {
-        System.out.print("ENTER THE ITEM NAME NOW: ");
+        System.out.print("======ENTER THE ITEM NAME NOW======");
         selectedItemName = sc.next();
         checkItemAvailability();
     }
 
     public void insertCoins() {
-        System.out.println("INSERT THE COINS NOW: ");
+        System.out.println("======INSERT THE COINS NOW=======");
         insertedAmount = coinInventory.addCoins();
         System.out.println("INSERTED AMOUNT: " + df.format(insertedAmount));
         isPaidEnough();
     }
 
     public void dispenseItemAndChange() {
+        System.out.println("======DISPENSING THE ITEM NOW=======");
         itemInventory.dispenseItem(selectedItemName);
 
         balanceToBePaid = Double.valueOf(df.format(insertedAmount - selectedItemCost));
@@ -52,6 +53,7 @@ public class VendingMachineImpl implements  VendingMachineAPI{
     }
 
     public void reset(){
+        System.out.println("======RESETTING THE VENDING MACHINE=====");
         coinInventory.reset();
         itemInventory.reset();
         printInventoryData();
@@ -62,7 +64,7 @@ public class VendingMachineImpl implements  VendingMachineAPI{
             if (item.name.equalsIgnoreCase(selectedItemName)) {
                 if (item.count > 1) {
                     System.out.println("ITEM AVAILABLE");
-                    System.out.println("ITEM PRICE IS " + item.cost);
+                    System.out.println("ITEM PRICE: " + item.cost);
                     selectedItemCost = item.cost;
                     itemSelected.set(true);
                 }
@@ -76,14 +78,14 @@ public class VendingMachineImpl implements  VendingMachineAPI{
 
     private void isPaidEnough() {
         if (insertedAmount < selectedItemCost) {
-            System.out.println("ITEM PRICE IS " + selectedItemCost);
+            System.out.println("ITEM PRICE: " + selectedItemCost);
             System.out.println("INSERT THE CORRECT AMOUNT OF MONEY");
             insertCoins();
         }
     }
 
     private void printInventoryData(){
-        System.out.println("INVENTORY BALANCE "+coinInventory.inventoryBalance);
+        System.out.println("INVENTORY BALANCE: "+coinInventory.inventoryBalance);
         System.out.println("REMAINING ITEMS:");
         itemInventory.printItems();
     }
