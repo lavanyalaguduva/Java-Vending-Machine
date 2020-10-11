@@ -1,8 +1,7 @@
 public interface VendingMachineAPI {
     public void initialize();
-    public void enterItemToBuy();
-    public void insertCoins();
-    public void dispenseItemAndChange();
+    public void buyAnItem();
+    public void cancelRequestAndRefund();
     public void getInventoryData();
     public void reset();
 }

@@ -25,14 +25,10 @@ public class VendingMachineImpl implements VendingMachineAPI {
             while (operation != 5 && !exit) {
                 switch (operation) {
                     case 1:
-                        vendingMachine.enterItemToBuy();
-                        vendingMachine.insertCoins();
-                        vendingMachine.dispenseItemAndChange();
-                        vendingMachine.getInventoryData();
+                        vendingMachine.buyAnItem();
                         break;
                     case 2:
                         vendingMachine.cancelRequestAndRefund();
-                        vendingMachine.getInventoryData();
                         break;
                     case 3:
                         vendingMachine.getInventoryData();
@@ -61,25 +57,11 @@ public class VendingMachineImpl implements VendingMachineAPI {
         itemInventory.initialize();
     }
 
-    public void enterItemToBuy() {
-        System.out.print("======ENTER THE ITEM NAME NOW======");
-        selectedItemName = sc.next();
-        checkItemAvailability();
-    }
-
-    public void insertCoins() {
-        System.out.println("======INSERT THE COINS NOW=======");
-        insertedAmount = coinInventory.addCoins();
-        System.out.println("INSERTED AMOUNT: " + df.format(insertedAmount));
-        isPaidEnough();
-    }
-
-    public void dispenseItemAndChange() {
-        System.out.println("======DISPENSING THE ITEM NOW=======");
-        itemInventory.dispenseItem(selectedItemName);
-
-        balanceToBePaid = Double.valueOf(df.format(insertedAmount - selectedItemCost));
-        coinInventory.dispenseCoins(balanceToBePaid);
+    public void buyAnItem() {
+        enterItemToBuy();
+        insertCoins();
+        dispenseItemAndChange();
+        getInventoryData();
     }
 
     public void cancelRequestAndRefund() {
@@ -87,6 +69,7 @@ public class VendingMachineImpl implements VendingMachineAPI {
 
         balanceToBePaid = Double.valueOf(df.format(selectedItemCost));
         coinInventory.dispenseCoins(balanceToBePaid);
+        getInventoryData();
     }
 
     public void getInventoryData() {
@@ -100,6 +83,27 @@ public class VendingMachineImpl implements VendingMachineAPI {
         coinInventory.reset();
         itemInventory.reset();
         getInventoryData();
+    }
+
+    private void enterItemToBuy() {
+        System.out.print("======ENTER THE ITEM NAME NOW======");
+        selectedItemName = sc.next();
+        checkItemAvailability();
+    }
+
+    private void insertCoins() {
+        System.out.println("======INSERT THE COINS NOW=======");
+        insertedAmount = coinInventory.addCoins();
+        System.out.println("INSERTED AMOUNT: " + df.format(insertedAmount));
+        isPaidEnough();
+    }
+
+    private void dispenseItemAndChange() {
+        System.out.println("======DISPENSING THE ITEM NOW=======");
+        itemInventory.dispenseItem(selectedItemName);
+
+        balanceToBePaid = Double.valueOf(df.format(insertedAmount - selectedItemCost));
+        coinInventory.dispenseCoins(balanceToBePaid);
     }
 
     private void printOperationsInConsole() {
