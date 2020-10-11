@@ -45,28 +45,27 @@ decrementing the item count when an item is bought
     - User should still be able to buy an item
 
 #### Command to run all the operations
-VendingMachineImpl.java has a main function. This can be run from IDE or from terminal to perform all operations such as 
+VendingMachineImpl.java has a main function. This will prompt the user to select one of the following operations
 
-1.Initializing vending machine cash inventory
+1.Buy an item
 
-2.Initializing vending machine item inventory
+2.Get the inventory data
 
-3.Entering an item to buy
+3.Resetting the vending machine
 
-4.Inserting coins
+4.Exit from the application
 
-5.Dispensing item and change
-
-6.Resetting the vending machine
+This can be run from IDE or from the terminal
 
 **To run from the terminal, use the below instruction**
 
 ``` Run java VendingMachineImpl from src/main/java```
 
 #### Improvements that can be done
-1. Throwing exceptions and using debugger logs to print error and logs instead of console logs
+1. If the cash inventory doesn't have enough change to dispense, application goes in an infinite loop. 
+This needs to be fixed.
 
-2. Providing console options to select a specific operation and performing only the required operations
+2. Throwing exceptions and using debugger logs to print error and logs instead of console logs
 
 3. Try running the vending machine implementation on a server and connecting the client remotely
                        

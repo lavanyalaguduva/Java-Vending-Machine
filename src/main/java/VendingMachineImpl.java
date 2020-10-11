@@ -1,9 +1,9 @@
-
 import java.text.DecimalFormat;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class VendingMachineImpl implements  VendingMachineAPI{
+public class VendingMachineImpl implements VendingMachineAPI {
     static Scanner sc = new Scanner(System.in);
     static DecimalFormat df = new DecimalFormat("#.##");
 
@@ -18,17 +18,47 @@ public class VendingMachineImpl implements  VendingMachineAPI{
     public static void main(String[] args) {
         VendingMachineImpl vendingMachine = new VendingMachineImpl();
         vendingMachine.initialize();
-        vendingMachine.enterItemToBuy();
-        vendingMachine.insertCoins();
-        vendingMachine.dispenseItemAndChange();
-        vendingMachine.reset();
-        sc.close();
+        try {
+            vendingMachine.printOperationsInConsole();
+            int operation = sc.nextInt();
+            boolean exit = false;
+            while (operation != 5 && !exit) {
+                switch (operation) {
+                    case 1:
+                        vendingMachine.enterItemToBuy();
+                        vendingMachine.insertCoins();
+                        vendingMachine.dispenseItemAndChange();
+                        vendingMachine.getInventoryData();
+                        break;
+                    case 2:
+                        vendingMachine.cancelRequestAndRefund();
+                        vendingMachine.getInventoryData();
+                        break;
+                    case 3:
+                        vendingMachine.getInventoryData();
+                        break;
+                    case 4:
+                        vendingMachine.reset();
+                        break;
+                    case 5:
+                        exit = true;
+                        sc.close();
+                    default:
+                        System.out.println("INCORRECT OPERATION SELECTED. SELECT AN APPROPRIATE ACTION");
+                }
+                vendingMachine.printOperationsInConsole();
+                operation = sc.nextInt();
+            }
+        } catch (InputMismatchException e) {
+            System.out.println("Incorrect input " + e);
+        }
+
     }
 
     public void initialize() {
         System.out.println("======INITIALIZE THE VENDING MACHINE BALANCE NOW======");
-        coinInventory.addCoins();
-        itemInventory.addItems();
+        coinInventory.initialize();
+        itemInventory.initialize();
     }
 
     public void enterItemToBuy() {
@@ -52,17 +82,40 @@ public class VendingMachineImpl implements  VendingMachineAPI{
         coinInventory.dispenseCoins(balanceToBePaid);
     }
 
-    public void reset(){
+    public void cancelRequestAndRefund() {
+        itemInventory.addBackItem(selectedItemName);
+
+        balanceToBePaid = Double.valueOf(df.format(selectedItemCost));
+        coinInventory.dispenseCoins(balanceToBePaid);
+    }
+
+    public void getInventoryData() {
+        System.out.println("INVENTORY BALANCE: " + coinInventory.inventoryBalance);
+        System.out.println("REMAINING ITEMS:");
+        itemInventory.printItems();
+    }
+
+    public void reset() {
         System.out.println("======RESETTING THE VENDING MACHINE=====");
         coinInventory.reset();
         itemInventory.reset();
-        printInventoryData();
+        getInventoryData();
     }
+
+    private void printOperationsInConsole() {
+        System.out.println("=====SELECT AN OPERATION TO PERFORM=====");
+        System.out.println("ENTER 1 TO BUY AN ITEM");
+        System.out.println("ENTER 2 TO CANCEL THE REQUEST");
+        System.out.println("ENTER 3 TO GET INVENTORY DATA");
+        System.out.println("ENTER 4 TO RESET THE INVENTORY");
+        System.out.println("ENTER 5 TO EXIT");
+    }
+
     private void checkItemAvailability() {
         AtomicBoolean itemSelected = new AtomicBoolean(false);
         itemInventory.itemList.forEach(item -> {
             if (item.name.equalsIgnoreCase(selectedItemName)) {
-                if (item.count > 1) {
+                if (item.count >= 1) {
                     System.out.println("ITEM AVAILABLE");
                     System.out.println("ITEM PRICE: " + item.cost);
                     selectedItemCost = item.cost;
@@ -83,13 +136,4 @@ public class VendingMachineImpl implements  VendingMachineAPI{
             insertCoins();
         }
     }
-
-    private void printInventoryData(){
-        System.out.println("INVENTORY BALANCE: "+coinInventory.inventoryBalance);
-        System.out.println("REMAINING ITEMS:");
-        itemInventory.printItems();
-    }
-
-
-
 }
